@@ -1,0 +1,16 @@
+dbInstance:
+  database: postgres
+  host: db
+  port: "5432"
+  sslRootCertEnabled: false
+  sslmode: disable
+exporterNamespaceName: vote
+exporterParams:
+  autoDiscoverDatabases: true
+namespace: vote
+namespaceName: vote
+secretName: postgresql-exporter
+ubi: false
+workloadName: db
+workloadType: deployment
+

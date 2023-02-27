@@ -1,0 +1,12 @@
+auth:
+  enabled: false
+  secretName: redis-exporter-auth
+exporterNamespaceName: vote
+namespace: vote
+namespaceName: vote
+ubi: false
+url:
+  name: redis
+workloadName: redis
+workloadType: deployment
+
