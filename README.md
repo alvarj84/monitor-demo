@@ -161,9 +161,15 @@ time="2023-02-27T21:07:40Z" level=info msg="Providing metrics at :9121/metrics"
 
 6. Check you can see the integration dashboards in Monitor.
 
+7. Login to DB's pod and execute a load test with pgbench:
+
+```
+% pgbench -h localhost -p 5432 -U postgres -i -s 100 -c 100 -j 100 -T 60 postgres
+```
+
 7. Create a notification channel.
 
-8. Create an alert using the notification channel.
+8. Create an alert using the notification channel
 
 
 
