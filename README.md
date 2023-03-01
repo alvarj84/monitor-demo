@@ -20,7 +20,7 @@ kubectl apply -f worker-deployment.yaml
 
 5. Configure the Monitor Integration for redis-deployment and db-deployment
 
-5.1 Regis integration
+5.1 Redis integration
 
 Login to the pod and create redis user and password 
 
@@ -57,6 +57,8 @@ time="2023-02-27T21:07:40Z" level=info msg="Providing metrics at :9121/metrics"
 ```
 
 5.2 Postgres Integration
+
+Configure the postres user.
 
 Ej:
 
@@ -169,7 +171,7 @@ time="2023-02-27T21:07:40Z" level=info msg="Providing metrics at :9121/metrics"
 
 7. Create a notification channel.
 
-8. Create an alert using the notification channel
+8. Create an alert using the notification channel. 
 
 
 
