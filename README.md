@@ -1,5 +1,17 @@
-1. Checkout branch "with-errors"
-2. Create the following deployments in your K8s cluster
+# Monitor 101 Lab Demo.
+
+## Lab's objectives:
+
+1. In this lab you will troubleshoot errors that prevent the workloads to start.
+
+2. You will also get familiar with Monitoring Integration.
+
+3. Execute a Postgres load test and see how the metrics are reported in Monitor.
+
+
+## 1. Checkout branch "with-errors"
+
+## 2. Create the following deployments in your K8s cluster
 
 ```
 kubectl create ns vote
@@ -14,15 +26,23 @@ kubectl apply -f vote-service.yaml
 kubectl apply -f worker-deployment.yaml
 ```
 
-3. Navigate to Sysdig Monitor and check the Advisor data.
+## 3. Navigate to Sysdig Monitor and check the Advisor data.
 
-4. Apply the appropiate solution to the redis and postgres deployments.
+Using Troubleshooting advisor, find the errors that are preventing the containers to start.
 
-5. Configure the Monitor Integration for redis-deployment and db-deployment
+## 4. Apply the appropiate solution to the redis and postgres deployments.
 
-5.1 Redis integration
+Change the appropiate configuration solutions in the workloads.
 
-Login to the pod and create redis user and password 
+## 5. Configure the Monitor Integration for redis-deployment and db-deployment
+
+Navigate to Monitor Integration and find the applications detected by Sysdig. 
+
+### 5.1. Redis integration
+
+#### 5.1.1. Login to the pod and create redis user and password 
+
+Note: you can use the code from the integration page's instruction as reference.
 
 Ej:
 ```
@@ -34,20 +54,20 @@ OK
 /data # exit
 ```
 
-Create K8s redis secret
+#### 5.1.2. Create K8s redis secret
 ```
 % kubectl create secret -n vote generic redis-exporter-auth \
   --from-literal=user=redis \
   --from-literal=password=redis
 ```
 
-Install the redis exporter
+#### 5.1.3. Install the redis exporter
 
 ```
 helm install -n vote -f redis-exporter-values.yaml --repo https://sysdiglabs.github.io/integrations-charts vote-redis redis-exporter
 ```
 
-Check redis exporter logs:
+#### 5.1.4. Check redis exporter logs:
 
 Ej:
 ```
@@ -56,9 +76,11 @@ time="2023-02-27T21:07:40Z" level=info msg="Redis Metrics Exporter [no-tag]    b
 time="2023-02-27T21:07:40Z" level=info msg="Providing metrics at :9121/metrics"
 ```
 
-5.2 Postgres Integration
+#### 5.2. Postgres Integration
 
-Configure the postres user.
+#### 5.2.1. Configure the postres user.
+
+Note: you can use the code from the integration page's instruction as reference.
 
 Ej:
 
@@ -137,7 +159,7 @@ postgres=# ALTER USER postgres_exporter WITH PASSWORD 'password';
 ALTER ROLE
 ```
 
-Create K8s secret:
+#### 5.2.2. Create K8s secret:
 
 ```
 kubectl create -n vote secret generic postgresql-exporter \
@@ -146,13 +168,13 @@ kubectl create -n vote secret generic postgresql-exporter \
 
 ```
 
-Create Postgres exporter
+#### 5.2.3. Create Postgres exporter
 
 ```
 helm install -n vote -f postgres-exporter-values.yaml --repo https://sysdiglabs.github.io/integrations-charts vote-db postgresql-exporter
 ```
 
-Check prometheus exporter pod logs:
+#### 5.2.4. Check prometheus exporter pod logs:
 
 Ej:
 ```
@@ -161,17 +183,34 @@ time="2023-02-27T21:07:40Z" level=info msg="Redis Metrics Exporter [no-tag]    b
 time="2023-02-27T21:07:40Z" level=info msg="Providing metrics at :9121/metrics"
 ```
 
-6. Check you can see the integration dashboards in Monitor.
+## 6. Check the integration dashboards in Monitor.
 
-7. Login to DB's pod and execute a load test with pgbench:
+After the integration is configured, Sysdig will give more dashboards templates for monitoring internal application's metrics. 
+
+## 7. Login to DB's pod and execute a load test with pgbench:
+
+In order to simulate real application usage, login to the Postgres's pod and execute a load test with pgbench.
 
 ```
-% pgbench -h localhost -p 5432 -U postgres -i -s 100 -c 100 -j 100 -T 60 postgres
+% pgbench -h localhost -p 5432 -U postgres -i -s 1000 -c 1000 -j 100 -T 60 postgres
 ```
 
-7. Create a notification channel.
+## 8. Navigate to the following Dashboards:
 
-8. Create an alert using the notification channel. 
+- PostgreSQL Database Details
+- PostgreSQL Instance Health
+- Node Status & Performance
+- Workload Status & Performance
+
+Notice the changes in the applications performance after running pgbench.
+
+## 9. Create a notification channel.
+
+Enable at least 1 notification channel that will be used for the alert creation.
+
+## 10. Create an alert.
+
+From some of the dashboards that are showing more activity create an alert and send it to a notification channel.
 
 
 
