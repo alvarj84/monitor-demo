@@ -78,7 +78,7 @@ time="2023-02-27T21:07:40Z" level=info msg="Providing metrics at :9121/metrics"
 
 #### 5.2. Postgres Integration
 
-#### 5.2.1. Configure the postres user.
+#### 5.2.1. Configure the postgres user.
 
 Note: you can use the code from the integration page's instruction as reference.
 
